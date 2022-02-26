@@ -1,0 +1,51 @@
+extends layout
+
+block content
+    script(src='/javascripts/index-page.js')
+    main
+        center
+            p Добро пожаловать в Яндекс
+            p Запишитесь на экскурсию по офисам Яндекса
+        img#poster.center-block(src='/images/poster-msk.jpg' )
+        #form-modal.modal.fade
+            .modal-dialog.modal-dialog-centered
+                .modal-content
+                    .modal-header
+                        button.close(type='close' data-dismiss='modal' aria-hidden='true') &times;
+                        h4#modal-title Заполните ваши данные
+                    .modal-body
+                        #result
+                        #register-form.form-horizontal
+                            form(method='POST' target='/register')
+                                mixin form-line(name, type, fielddesc)
+                                    .form-group
+                                        label.col-md-4.control-label(for=name)= fielddesc
+                                        .col-md-4
+                                            if block
+                                                block
+                                            else if type === 'list'
+                                                select.form-control.input-md(id=name)
+                                                    each text, id in attributes.items
+                                                        option(value=id) #{text}
+                                            else
+                                                input.form-control.input-md(id=name, name=name, type=type)&attributes(attributes)
+                                +form-line('name'      , 'text'   , 'Имя')(required=true)
+                                +form-line('age'       , 'number' , 'Возраст')(min=14, max=1000, step=1, required=true)
+                                +form-line('city'      , 'list'   , 'Офис')(items={msk: 'Москва (Красная Роза)', spb: 'Санкт-Петербург (БЦ Бенуа)', ekb: 'Екатеринбург (БЦ Палладиум)', nsk: 'Новосибирск (БЦ Гринвич)'})
+                                +form-line('affilation', 'list'   , 'Сотрудник яндекса')(items={yandex: 'Да', other: 'Нет' })
+                    .modal-footer
+                        button.btn.btn-default(type='button' data-dismiss='modal') Закрыть
+                        button.btn.btn-primary(type='button' onclick='submitForm()') Отправить
+        button#activate-form.btn.btn-warning.btn-lg.center-block(type='button') Записаться
+        script.
+            'use strict';
+            $('#activate-form').click(function () {
+                $('#form-modal').modal('show');
+                $('#name').focus();
+            });
+            $('#exec').click(function() {
+                submitForm();
+            });
+            $('#city').change(function () {
+                $('#poster').attr('src', `/images/poster-${this.value}.jpg`)
+            });
