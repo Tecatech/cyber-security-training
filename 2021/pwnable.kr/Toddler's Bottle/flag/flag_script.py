@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import gdb
 
 gdb.execute('set print asm-demangle on')
