@@ -1,3 +1,0 @@
-break alarm
-break *route + 1152
-
