@@ -1,1 +1,1 @@
-# Cyber security training course
+# Information security training course
